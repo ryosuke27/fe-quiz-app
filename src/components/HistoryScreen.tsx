@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabase';
-import { getDeviceId } from '../utils/deviceId';
 import type { DbSession } from '../types';
 
 interface WeakQuestion {
@@ -28,13 +27,11 @@ export function HistoryScreen({ onBack }: Props) {
     }
 
     const client = supabase;
-    const deviceId = getDeviceId();
 
     const fetchData = async () => {
       const { data: sessionData } = await client
         .from('sessions')
         .select('*')
-        .eq('device_id', deviceId)
         .order('created_at', { ascending: false });
 
       if (sessionData) {
@@ -43,8 +40,7 @@ export function HistoryScreen({ onBack }: Props) {
 
       const { data: answerData } = await client
         .from('answer_records')
-        .select('question_text, correct_answer, is_correct, sessions!inner(device_id)')
-        .eq('sessions.device_id', deviceId);
+        .select('question_text, correct_answer, is_correct');
 
       if (answerData) {
         const map = new Map<string, { question_text: string; correct_answer: string; total: number; wrong: number }>();
