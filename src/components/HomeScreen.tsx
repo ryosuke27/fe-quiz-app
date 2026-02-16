@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import type { User } from '@supabase/supabase-js';
 import type { StudyMode, CsvFile } from '../types';
+import { UserMenu } from './UserMenu';
 
 const CSV_FILES: CsvFile[] = [
   { label: 'FE試験 問題集2（415問）', path: '/FE試験_問題集2.csv' },
@@ -9,9 +11,11 @@ const CSV_FILES: CsvFile[] = [
 interface Props {
   onStart: (csvPath: string, mode: StudyMode, doShuffle: boolean) => void;
   onHistory: () => void;
+  user: User | null;
+  onSignOut: () => void;
 }
 
-export function HomeScreen({ onStart, onHistory }: Props) {
+export function HomeScreen({ onStart, onHistory, user, onSignOut }: Props) {
   const [selectedFile, setSelectedFile] = useState(0);
   const [mode, setMode] = useState<StudyMode>('flashcard');
   const [doShuffle, setDoShuffle] = useState(true);
@@ -22,6 +26,12 @@ export function HomeScreen({ onStart, onHistory }: Props) {
 
   return (
     <div className="home-screen">
+      {user && (
+        <div className="global-header">
+          <UserMenu user={user} onSignOut={onSignOut} />
+        </div>
+      )}
+
       <h1>基本情報技術者試験 単語帳</h1>
 
       <div className="home-card">

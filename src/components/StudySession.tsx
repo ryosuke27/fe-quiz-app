@@ -14,13 +14,14 @@ interface Props {
   mode: StudyMode;
   doShuffle: boolean;
   onHome: () => void;
+  userId?: string;
 }
 
-export function StudySession({ csvPath, mode, doShuffle, onHome }: Props) {
+export function StudySession({ csvPath, mode, doShuffle, onHome, userId }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
-  const hasSaved = useRef(false);
+  const lastSavedBlock = useRef(0);
   const session = useStudySession();
 
   useEffect(() => {
@@ -52,8 +53,10 @@ export function StudySession({ csvPath, mode, doShuffle, onHome }: Props) {
   }, [csvPath, mode, doShuffle]);
 
   useEffect(() => {
-    if (!session.finished || hasSaved.current || !supabase) return;
-    hasSaved.current = true;
+    if (!session.finished || !supabase) return;
+    if (session.blockNumber <= lastSavedBlock.current) return;
+
+    lastSavedBlock.current = session.blockNumber;
     setSaveStatus('saving');
     saveSessionToDb({
       csvFile: csvPath,
@@ -61,10 +64,11 @@ export function StudySession({ csvPath, mode, doShuffle, onHome }: Props) {
       correctCount: session.correctCount,
       total: session.total,
       answers: session.answers,
+      userId,
     })
       .then(() => setSaveStatus('saved'))
       .catch(() => setSaveStatus('error'));
-  }, [session.finished, session.correctCount, session.total, session.answers, csvPath, mode]);
+  }, [session.finished, session.blockNumber, session.correctCount, session.total, session.answers, csvPath, mode]);
 
   if (loading) {
     return (
@@ -94,14 +98,13 @@ export function StudySession({ csvPath, mode, doShuffle, onHome }: Props) {
         total={session.total}
         onHome={onHome}
         onRetry={() => {
-          hasSaved.current = false;
+          lastSavedBlock.current = 0;
           setSaveStatus('idle');
           session.startSession(session.allQuestions, mode, doShuffle);
         }}
         onNextBlock={
           session.hasNextBlock
             ? () => {
-                hasSaved.current = false;
                 setSaveStatus('idle');
                 session.nextBlock();
               }

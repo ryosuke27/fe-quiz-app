@@ -8,6 +8,7 @@ interface SaveSessionParams {
   correctCount: number;
   total: number;
   answers: AnswerRecord[];
+  userId?: string;
 }
 
 export async function saveSessionToDb(params: SaveSessionParams): Promise<void> {
@@ -25,6 +26,7 @@ export async function saveSessionToDb(params: SaveSessionParams): Promise<void> 
       mode: params.mode,
       correct_count: params.correctCount,
       total_count: params.total,
+      user_id: params.userId ?? null,
     })
     .select('id')
     .single();
