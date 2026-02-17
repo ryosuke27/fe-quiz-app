@@ -1,17 +1,17 @@
 :root {
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
-  --correct: #16a34a;
-  --correct-bg: #dcfce7;
-  --wrong: #dc2626;
-  --wrong-bg: #fee2e2;
-  --bg: #f8fafc;
+  --primary: #5c4033;
+  --primary-hover: #4a3228;
+  --correct: #5a8a3c;
+  --correct-bg: #e8f3de;
+  --wrong: #b94a3a;
+  --wrong-bg: #fce4e0;
+  --bg: #faf6f0;
   --card-bg: #ffffff;
-  --text: #1e293b;
-  --text-secondary: #64748b;
-  --border: #e2e8f0;
+  --text: #2c2017;
+  --text-secondary: #8c7b6b;
+  --border: #e6ddd3;
   --radius: 12px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow: 0 1px 3px rgba(60, 40, 20, 0.08), 0 1px 2px rgba(60, 40, 20, 0.05);
 }
 
 * {
@@ -68,7 +68,7 @@ body {
 }
 
 .btn-secondary:hover {
-  background: #cbd5e1;
+  background: #ddd4c9;
 }
 
 .btn-correct {
@@ -81,82 +81,73 @@ body {
   color: #fff;
 }
 
-/* Global Header (user icon top-right) */
+/* Global Header (user info top-right) */
 .global-header {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 4px;
 }
 
-/* User Menu (avatar dropdown) */
-.user-menu-wrapper {
-  position: relative;
-}
-
-.user-menu-trigger {
+/* User Menu */
+.user-menu {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 2px solid var(--border);
-  border-radius: 50%;
+  gap: 12px;
   background: var(--card-bg);
-  cursor: pointer;
-  overflow: hidden;
-  transition: border-color 0.15s;
+  padding: 6px 6px 6px 12px;
+  border-radius: 100px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-.user-menu-trigger:hover {
-  border-color: var(--primary);
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
-.user-avatar-fallback {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.user-menu-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-}
-
-.user-menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 6px);
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  padding: 12px 16px;
-  min-width: 180px;
-  z-index: 11;
+.user-avatar--initial {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), #7a6455);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
-.user-menu-name {
-  font-size: 0.85rem;
-  font-weight: 600;
+.user-name {
+  font-size: 0.8rem;
+  font-weight: 500;
   color: var(--text);
-  word-break: break-all;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .btn-logout {
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  width: 100%;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 100px;
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-logout:hover {
+  background: var(--border);
+  color: var(--text);
 }
 
 /* Login Screen */
@@ -165,7 +156,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
   min-height: 60vh;
   text-align: center;
 }
@@ -197,7 +188,7 @@ body {
 
 .btn-google-large:hover {
   border-color: var(--primary);
-  background: #eff6ff;
+  background: #f5efe8;
 }
 
 .login-skip {
@@ -257,7 +248,7 @@ body {
 
 .file-option.selected {
   border-color: var(--primary);
-  background: #eff6ff;
+  background: #f5efe8;
 }
 
 .file-option input[type='radio'] {
@@ -285,7 +276,7 @@ body {
 
 .mode-btn.active {
   border-color: var(--primary);
-  background: #eff6ff;
+  background: #f5efe8;
 }
 
 .mode-icon {
@@ -474,7 +465,7 @@ body {
 
 .quiz-choice:hover:not(:disabled) {
   border-color: var(--primary);
-  background: #eff6ff;
+  background: #f5efe8;
 }
 
 .quiz-choice.correct {
@@ -741,7 +732,7 @@ body {
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 4px;
-  background: #eff6ff;
+  background: #f5efe8;
   color: var(--primary);
 }
 

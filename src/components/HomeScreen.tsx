@@ -3,9 +3,15 @@ import type { User } from '@supabase/supabase-js';
 import type { StudyMode, CsvFile } from '../types';
 import { UserMenu } from './UserMenu';
 
-const CSV_FILES: CsvFile[] = [
+const OWNER_UID = import.meta.env.VITE_OWNER_UID as string | undefined;
+
+const OWNER_FILES: CsvFile[] = [
   { label: 'FE試験 問題集2（415問）', path: '/FE試験_問題集2.csv' },
   { label: '基数変換 問題集（35問）', path: '/基数変換_問題集.csv' },
+];
+
+const PUBLIC_FILES: CsvFile[] = [
+  { label: '畜産用語 問題集', path: '/畜産用語_問題集.csv' },
 ];
 
 interface Props {
@@ -16,12 +22,15 @@ interface Props {
 }
 
 export function HomeScreen({ onStart, onHistory, user, onSignOut }: Props) {
+  const isOwner = user?.id === OWNER_UID;
+  const csvFiles = isOwner ? [...OWNER_FILES, ...PUBLIC_FILES] : PUBLIC_FILES;
+
   const [selectedFile, setSelectedFile] = useState(0);
   const [mode, setMode] = useState<StudyMode>('flashcard');
   const [doShuffle, setDoShuffle] = useState(true);
 
   const handleStart = () => {
-    onStart(CSV_FILES[selectedFile].path, mode, doShuffle);
+    onStart(csvFiles[selectedFile].path, mode, doShuffle);
   };
 
   return (
@@ -32,12 +41,12 @@ export function HomeScreen({ onStart, onHistory, user, onSignOut }: Props) {
         </div>
       )}
 
-      <h1>基本情報技術者試験 単語帳</h1>
+      <h1>🐄 単語帳</h1>
 
       <div className="home-card">
         <h2>問題集を選択</h2>
         <div className="file-options">
-          {CSV_FILES.map((f, i) => (
+          {csvFiles.map((f, i) => (
             <label
               key={f.path}
               className={`file-option ${selectedFile === i ? 'selected' : ''}`}
